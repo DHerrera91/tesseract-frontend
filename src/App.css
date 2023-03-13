@@ -29,7 +29,7 @@ body {
   border-radius: 25px;
   padding: 25px 50px;
   padding-bottom: 32px;
-  box-shadow: 5px 10px 12 px rgb(47, 42, 73);
+  box-shadow: 5px 10px 15px 10px rgb(24, 20, 45);
 }
 
 h1 {
@@ -117,11 +117,11 @@ h1 {
   );
 }
 
-.todo-container {
+/* .todo-container {
   display: flex;
   flex-direction: row;
   position: relative;
-}
+} */
 
 .todo-row {
   /* display: flex; */
