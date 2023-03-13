@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { BsArrowDown, BsPlusCircleFill } from "react-icons/bs";
 import { RiCheckboxCircleLine } from "react-icons/ri";
 
@@ -24,14 +24,14 @@ function TodoForm(props) {
     setShowDescription(!showDescription);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     props.onSubmit({
       id: Math.floor(Math.random() * 10000),
-      text: input,
+      title: input,
       description,
-      isDone: false,
+      is_done: false,
       showDescription: false,
     });
     setInput("");
@@ -46,7 +46,7 @@ function TodoForm(props) {
             placeholder="Update your item"
             value={input}
             onChange={handleChange}
-            name="text"
+            name="title"
             ref={inputRef}
             className="todo-input edit todo-description"
           />
@@ -68,7 +68,7 @@ function TodoForm(props) {
             placeholder="Add a todo"
             value={input}
             onChange={handleChange}
-            name="text"
+            name="title"
             className="todo-input"
             ref={inputRef}
           />

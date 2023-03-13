@@ -2,23 +2,29 @@ import React, { useState } from "react";
 import TodoForm from "./TodoForm";
 import Todo from "./Todo";
 import { useEffect } from "react";
+import { callTodoList, createTodo, update, eliminate } from "./Conection";
 
 function TodoList() {
   const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
-    console.log(todos);
-  }, [todos]);
+  const refreshToDo = () => {
+    callTodoList().then((todos) => {
+      console.log(todos);
+      setTodos(todos);
+    });
+  };
 
-  const addTodo = (todo) => {
-    if (!todo.text || /^\s*$/.test(todo.text)) {
+  useEffect(() => {
+    refreshToDo();
+  }, []);
+
+  const addTodo = async (todo) => {
+    //todo: { text:""}
+    if (!todo.title || /^\s*$/.test(todo.title)) {
       return;
     }
-
-    const newTodos = [todo, ...todos];
-
-    setTodos(newTodos);
-    console.log(...todos);
+    await createTodo(todo);
+    refreshToDo();
   };
 
   const showDescription = (todoId) => {
@@ -31,18 +37,21 @@ function TodoList() {
     setTodos(updatedTodos);
   };
 
-  const updateTodo = (todoId, newValue) => {
-    if (!newValue.text || /^\s*$/.test(newValue.text)) {
+  const updateTodo = async (todoId, newValue) => {
+    if (!newValue.title || /^\s*$/.test(newValue.title)) {
       return;
     }
+    await update(todoId, newValue);
+    refreshToDo();
 
-    setTodos((prev) =>
-      prev.map((item) => (item.id === todoId ? newValue : item))
-    );
+    // setTodos((prev) =>
+    //   prev.map((item) => (item.id === todoId ? newValue : item))
+    // );
   };
 
   const removeTodo = (id) => {
     const removedArr = [...todos].filter((todo) => todo.id !== id);
+    eliminate(id);
 
     setTodos(removedArr);
   };
@@ -50,7 +59,8 @@ function TodoList() {
   const completeTodo = (id) => {
     let updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
-        todo.isComplete = !todo.isComplete;
+        todo.is_done = !todo.is_done;
+        update(todo.id, todo);
       }
       return todo;
     });
@@ -59,7 +69,7 @@ function TodoList() {
 
   return (
     <>
-      <h1>What's the Plan for Today?</h1>
+      <h1>Make successful your day!</h1>
       <TodoForm onSubmit={addTodo} />
       <Todo
         todos={todos}
@@ -71,5 +81,4 @@ function TodoList() {
     </>
   );
 }
-
 export default TodoList;
